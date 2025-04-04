@@ -38,6 +38,21 @@ export const deleteUser=createAsyncThunk(
     }
 )
 
+export const getAllUsers=createAsyncThunk(
+    "users/getAllUser",
+    async ()=>{
+        try{
+            const response = await api.get("/get");
+            return response.data;
+        }catch (error:any){
+            return error.response?.data || error.message;
+        }
+    }
+)
+
+
+
+
 const userSlice = createSlice({
     name: "users",
     initialState: {

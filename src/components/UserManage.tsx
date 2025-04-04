@@ -1,7 +1,7 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store.ts";
-import {createUser, deleteUser} from "../reducer/UserSlice.ts";
+import {createUser, deleteUser, getAllUsers} from "../reducer/UserSlice.ts";
 
 export default function UserManage() {
     const [newUser, setNewUser] = useState({
@@ -42,6 +42,10 @@ export default function UserManage() {
     function handleDeleteUser(email:string){
         dispatch(deleteUser(email));
     }
+    useEffect(() => {
+        getAllUsers();
+    }, []);
+
     return (
         <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-lg">
             <h2 className="text-lg font-bold mb-4">User Management</h2>
