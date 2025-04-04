@@ -14,9 +14,10 @@ export default function UserManage() {
         phone: "",
         comment: "",
     });
-
+    const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
     const dispatch = useDispatch<AppDispatch>();
+    const [selectedUser, setSelectedUser] = useState<any>(null);
 
     function handleCreateUser() {
         if (!newUser.fullname || !newUser.email) {
@@ -123,6 +124,21 @@ export default function UserManage() {
                 >
                     Create User
                 </button>
+
+
+
+            </div>
+            <h3 className="font-semibold">Users</h3>
+            <ul>
+                {users.map((user: any) => (
+                    <li key={user.id} className="flex justify-between">
+                        {user.name} - {user.email}
+                        <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                    </li>
+                ))}
+            </ul>
+            <div>
+
             </div>
         </div>
     );
