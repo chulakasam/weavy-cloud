@@ -1,26 +1,52 @@
-import { createSlice} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import User from "../model/User.ts";
 
-
-
-const initialState:User[] = [];
-
+const API_BASE_URL = "";
+const TOKEN = "";
 
 const api = axios.create({
-    baseURL: "",
-});
-
-const UserSlice = createSlice({
-    name: 'user',
-    initialState: initialState,
-    reducers: {
+    baseURL: API_BASE_URL,
+    headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json",
     },
-    extraReducers: (builder) => {
-
-    }
 });
 
 
+export const createUser = createAsyncThunk(
+    "users/createUser",
+    async (userData: User, { rejectWithValue }) => {
+        try {
+            const response = await api.post("/users", userData);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Failed to create user.");
+        }
+    }
+);
 
-export default UserSlice.reducer;
+const userSlice = createSlice({
+    name: "users",
+    initialState: {
+        users: [],
+        status: "idle",
+        error: null,
+    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(createUser.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(createUser.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.users.push(action.payload);
+            })
+            .addCase(createUser.rejected, (state, action) => {
+                state.status = "failed";
+            });
+    },
+});
+
+export default userSlice.reducer;
