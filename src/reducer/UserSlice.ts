@@ -26,6 +26,18 @@ export const createUser = createAsyncThunk(
     }
 );
 
+export const deleteUser=createAsyncThunk(
+    "users/delete",
+    async (email:string,{rejectWithValue})=>{
+        try {
+            const response = await api.delete(`/delete/${email}`);
+            return response.data;
+        }catch (error:any){
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 const userSlice = createSlice({
     name: "users",
     initialState: {
@@ -46,6 +58,12 @@ const userSlice = createSlice({
             .addCase(createUser.rejected, (state, action) => {
                 state.status = "failed";
             });
+
+
+
+
+
+
     },
 });
 

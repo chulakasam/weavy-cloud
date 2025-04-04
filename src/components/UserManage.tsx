@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store.ts";
-import { createUser } from "../reducer/UserSlice.ts";
+import {createUser, deleteUser} from "../reducer/UserSlice.ts";
 
 export default function UserManage() {
     const [newUser, setNewUser] = useState({
@@ -39,6 +39,9 @@ export default function UserManage() {
         setError("");
     }
 
+    function handleDeleteUser(email:string){
+        dispatch(deleteUser(email));
+    }
     return (
         <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-lg">
             <h2 className="text-lg font-bold mb-4">User Management</h2>
@@ -131,9 +134,9 @@ export default function UserManage() {
             <h3 className="font-semibold">Users</h3>
             <ul>
                 {users.map((user: any) => (
-                    <li key={user.id} className="flex justify-between">
-                        {user.name} - {user.email}
-                        <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                    <li key={user.email} className="flex justify-between">
+                        {user.fullname} - {user.firstname}-{user.lastname}-{user.familyname}-{user.nickname}-{user.email}-{user.phone}-{user.comment}
+                        <button onClick={() => handleDeleteUser(user.email)}>Delete</button>
                     </li>
                 ))}
             </ul>
